@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="deploy" name="task2WebServletsAppHybrisAnt">
+
+    <property environment="env"/>
+    <property name="project.classes.dir" value="build/classes"/>
+    <property name="project.web.dir" value="webapp"/>
+    <property name="project.lib.dir" value="${project.web.dir}/WEB-INF/lib"/>
+    <property name="project.name" value="${ant.project.name}"/>
+    <property name="project.war" value="${project.name}.war"/>
+    <property name="TOMCAT_HOME" value="${env.СATALINA_HOME}"/>
+    <property name="project.deploy.location" value="${TOMCAT_HOME}/webapps"/>
+
+
+    <path id="classpath.lib">
+        <fileset dir="${project.lib.dir}" includes="*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${project.classes.dir}"/>
+        <delete dir="${project.war}"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <mkdir dir="${project.classes.dir}"/>
+        <copy todir="${project.classes.dir}" includeemptydirs="false">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="build" depends="init">
+        <javac includeantruntime="false" destdir="${project.classes.dir}">
+            <src path="src"/>
+            <classpath refid="classpath.lib"/>
+        </javac>
+
+    </target>
+    <target name="package" depends="build">
+        <war needxmlfile="fasle" index="true" destfile="${project.war}">
+            <classes dir="${project.classes.dir}"/>
+            <lib dir="${project.lib.dir}"/>
+            <fileset dir="${project.web.dir}">
+                <include name="**/*.*"/>
+            </fileset>
+        </war>
+
+    </target>
+    <target name="deploy" depends="package">
+        <copy todir="${project.deploy.location}" file="${project.war}"/>
+    </target>
+</project>
