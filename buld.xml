@@ -37,11 +37,10 @@
 
     </target>
     <target name="package" depends="build">
-        <war needxmlfile="fasle" index="true" destfile="${project.war}">
+        <war needxmlfile="false" index="true" destfile="${project.war}">
             <classes dir="${project.classes.dir}"/>
             <lib dir="${project.lib.dir}"/>
             <fileset dir="${project.web.dir}">
-                <include name="**/*.*"/>
             </fileset>
         </war>
 
